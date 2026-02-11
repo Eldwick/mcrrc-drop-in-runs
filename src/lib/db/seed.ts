@@ -293,6 +293,9 @@ const seedRuns = [
 async function seed() {
   console.log("Seeding database with MCRRC run data...");
 
+  console.log("  Clearing existing runs...");
+  await db.delete(runs);
+
   for (const run of seedRuns) {
     await db.insert(runs).values(run);
     console.log(`  Inserted: ${run.name}`);
