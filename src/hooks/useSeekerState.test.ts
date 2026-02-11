@@ -138,16 +138,29 @@ describe("seekerReducer — bottom sheet auto-open", () => {
     });
   });
 
-  describe("SELECT_RUN opens sheet when collapsed", () => {
-    it("opens sheet to half when a run is selected and sheet is collapsed", () => {
+  describe("SELECT_RUN collapses sheet to show selected card", () => {
+    it("keeps sheet collapsed when a run is selected from collapsed state", () => {
       const state = seekerReducer(initialState, {
         type: "SELECT_RUN",
         runId: 1,
       });
-      expect(state.sheetState).toBe("half");
+      expect(state.sheetState).toBe("collapsed");
+      expect(state.selectedRunId).toBe(1);
     });
 
-    it("does not change sheet state when a run is selected and sheet is not collapsed", () => {
+    it("collapses sheet from half when a run is selected", () => {
+      let state = seekerReducer(initialState, {
+        type: "SET_SHEET_STATE",
+        sheetState: "half",
+      });
+      state = seekerReducer(state, {
+        type: "SELECT_RUN",
+        runId: 1,
+      });
+      expect(state.sheetState).toBe("collapsed");
+    });
+
+    it("collapses sheet from full when a run is selected", () => {
       let state = seekerReducer(initialState, {
         type: "SET_SHEET_STATE",
         sheetState: "full",
@@ -156,7 +169,7 @@ describe("seekerReducer — bottom sheet auto-open", () => {
         type: "SELECT_RUN",
         runId: 1,
       });
-      expect(state.sheetState).toBe("full");
+      expect(state.sheetState).toBe("collapsed");
     });
   });
 

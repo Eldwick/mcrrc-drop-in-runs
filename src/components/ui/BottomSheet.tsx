@@ -8,36 +8,37 @@ interface BottomSheetProps {
   snapState: SnapState;
   onSnapStateChange: (state: SnapState) => void;
   summary: string;
+  collapsedHeight?: number;
   children: React.ReactNode;
 }
 
 const HANDLE_HEIGHT = 70;
+const HALF_RATIO = 0.75;
 
-function getTranslateY(state: SnapState): string {
+function getTranslateY(state: SnapState, collapsedH: number): string {
   switch (state) {
     case "collapsed":
-      return `calc(100% - ${HANDLE_HEIGHT}px)`;
+      return `calc(100% - ${collapsedH}px)`;
     case "half":
-      return "calc(100% - 50vh)";
+      return `calc(100% - ${HALF_RATIO * 100}vh)`;
     case "full":
       return "0px";
   }
 }
 
-function getVisibleHeight(state: SnapState, viewportHeight: number): number {
+function getVisibleHeight(state: SnapState, viewportHeight: number, collapsedH: number): number {
   switch (state) {
     case "collapsed":
-      return HANDLE_HEIGHT;
+      return collapsedH;
     case "half":
-      return viewportHeight * 0.5;
+      return viewportHeight * HALF_RATIO;
     case "full":
       return viewportHeight - 40;
   }
 }
 
-function nearestSnap(visibleHeight: number, viewportHeight: number): SnapState {
-  const collapsedH = HANDLE_HEIGHT;
-  const halfH = viewportHeight * 0.5;
+function nearestSnap(visibleHeight: number, viewportHeight: number, collapsedH: number): SnapState {
+  const halfH = viewportHeight * HALF_RATIO;
   const fullH = viewportHeight - 40;
 
   const midCollapseHalf = (collapsedH + halfH) / 2;
@@ -52,6 +53,7 @@ export const BottomSheet = ({
   snapState,
   onSnapStateChange,
   summary,
+  collapsedHeight = HANDLE_HEIGHT,
   children,
 }: BottomSheetProps) => {
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -61,7 +63,7 @@ export const BottomSheet = ({
   const [currentTranslateY, setCurrentTranslateY] = useState<string | null>(null);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
 
-  const translateY = currentTranslateY ?? getTranslateY(snapState);
+  const translateY = currentTranslateY ?? getTranslateY(snapState, collapsedHeight);
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -69,12 +71,13 @@ export const BottomSheet = ({
       startY.current = e.clientY;
       startVisibleHeight.current = getVisibleHeight(
         snapState,
-        window.innerHeight
+        window.innerHeight,
+        collapsedHeight
       );
       setTransitionEnabled(false);
       (e.target as HTMLElement).setPointerCapture(e.pointerId);
     },
-    [snapState]
+    [snapState, collapsedHeight]
   );
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
@@ -104,12 +107,12 @@ export const BottomSheet = ({
         )
       );
 
-      const snap = nearestSnap(newVisibleHeight, window.innerHeight);
+      const snap = nearestSnap(newVisibleHeight, window.innerHeight, collapsedHeight);
       setTransitionEnabled(true);
       setCurrentTranslateY(null);
       onSnapStateChange(snap);
     },
-    [onSnapStateChange]
+    [onSnapStateChange, collapsedHeight]
   );
 
   const handleHandleClick = useCallback(() => {

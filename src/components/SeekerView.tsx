@@ -145,6 +145,7 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
         snapState={state.sheetState}
         onSnapStateChange={handleSheetStateChange}
         summary={getSummaryText(rankedRuns, runs)}
+        collapsedHeight={state.selectedRunId !== null ? 200 : undefined}
       >
         <RunCardList
           runs={runs}

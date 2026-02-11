@@ -66,11 +66,7 @@ export function seekerReducer(state: SeekerState, action: SeekerAction): SeekerS
       return newState;
     }
     case "SELECT_RUN": {
-      const newState = { ...state, selectedRunId: action.runId };
-      if (newState.sheetState === "collapsed") {
-        newState.sheetState = "half";
-      }
-      return newState;
+      return { ...state, selectedRunId: action.runId, sheetState: "collapsed" };
     }
     case "SET_SHEET_STATE":
       return { ...state, sheetState: action.sheetState };
