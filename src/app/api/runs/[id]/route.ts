@@ -36,7 +36,7 @@ function serializeRun(row: RunRow) {
 }
 
 export async function GET(
-  _request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
@@ -48,7 +48,14 @@ export async function GET(
 
   const [run] = await db.select().from(runs).where(eq(runs.id, numId));
 
-  if (!run || !run.isActive) {
+  if (!run) {
+    return NextResponse.json({ error: "Run not found" }, { status: 404 });
+  }
+
+  const token = request.nextUrl.searchParams.get("token");
+  const hasValidToken = !!token && token === run.editToken;
+
+  if (!run.isActive && !hasValidToken) {
     return NextResponse.json({ error: "Run not found" }, { status: 404 });
   }
 

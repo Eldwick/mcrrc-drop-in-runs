@@ -6,6 +6,7 @@ import {
   createRunSchema,
   type PaceGroupInput,
   type GeocodeResult,
+  type RunFormInitialData,
 } from "@/lib/types/run";
 import { PaceGroupSelector } from "./PaceGroupSelector";
 import { DynamicLocationPickerMap } from "@/components/map/DynamicLocationPickerMap";
@@ -31,23 +32,42 @@ const DEFAULT_PACE_GROUPS: PaceGroupInput = {
 
 interface SuccessData {
   id: number;
-  editToken: string;
+  editToken?: string;
 }
 
-export const RunForm = () => {
-  const [name, setName] = useState("");
-  const [dayOfWeek, setDayOfWeek] = useState<string>("");
-  const [startTime, setStartTime] = useState("");
-  const [locationName, setLocationName] = useState("");
-  const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
-  const [flyTo, setFlyTo] = useState<{ lat: number; lng: number } | null>(null);
-  const [typicalDistances, setTypicalDistances] = useState("");
-  const [terrain, setTerrain] = useState<string>("");
-  const [paceGroups, setPaceGroups] = useState<PaceGroupInput>(DEFAULT_PACE_GROUPS);
-  const [contactName, setContactName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [notes, setNotes] = useState("");
+interface RunFormProps {
+  mode?: "create" | "edit";
+  initialData?: RunFormInitialData;
+  runId?: number;
+  editToken?: string;
+}
+
+export const RunForm = ({
+  mode = "create",
+  initialData,
+  runId,
+  editToken,
+}: RunFormProps) => {
+  const [name, setName] = useState(initialData?.name ?? "");
+  const [dayOfWeek, setDayOfWeek] = useState<string>(initialData?.dayOfWeek ?? "");
+  const [startTime, setStartTime] = useState(initialData?.startTime ?? "");
+  const [locationName, setLocationName] = useState(initialData?.locationName ?? "");
+  const [pin, setPin] = useState<{ lat: number; lng: number } | null>(
+    initialData ? { lat: initialData.latitude, lng: initialData.longitude } : null
+  );
+  const [flyTo, setFlyTo] = useState<{ lat: number; lng: number } | null>(
+    initialData ? { lat: initialData.latitude, lng: initialData.longitude } : null
+  );
+  const [typicalDistances, setTypicalDistances] = useState(initialData?.typicalDistances ?? "");
+  const [terrain, setTerrain] = useState<string>(initialData?.terrain ?? "");
+  const [paceGroups, setPaceGroups] = useState<PaceGroupInput>(
+    initialData?.paceGroups ?? DEFAULT_PACE_GROUPS
+  );
+  const [contactName, setContactName] = useState(initialData?.contactName ?? "");
+  const [contactEmail, setContactEmail] = useState(initialData?.contactEmail ?? "");
+  const [contactPhone, setContactPhone] = useState(initialData?.contactPhone ?? "");
+  const [notes, setNotes] = useState(initialData?.notes ?? "");
+  const [isActive, setIsActive] = useState(initialData?.isActive ?? true);
 
   const [addressQuery, setAddressQuery] = useState("");
   const [geocodeResults, setGeocodeResults] = useState<GeocodeResult[]>([]);
@@ -144,23 +164,41 @@ export const RunForm = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("/api/runs", {
-        method: "POST",
+      const url =
+        mode === "edit"
+          ? `/api/runs/${runId}?token=${editToken}`
+          : "/api/runs";
+      const method = mode === "edit" ? "PUT" : "POST";
+      const body =
+        mode === "edit" ? { ...parsed.data, isActive } : parsed.data;
+
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify(body),
       });
 
       const json = await res.json();
 
       if (!res.ok) {
-        setServerError(json.error || "Something went wrong. Please try again.");
+        if (res.status === 403) {
+          setServerError(
+            "Your edit link is invalid or has expired. If you've lost your link, contact the site admin."
+          );
+        } else {
+          setServerError(json.error || "Something went wrong. Please try again.");
+        }
         return;
       }
 
-      setSuccess({
-        id: json.data.id,
-        editToken: json.data.editToken,
-      });
+      if (mode === "edit") {
+        setSuccess({ id: runId! });
+      } else {
+        setSuccess({
+          id: json.data.id,
+          editToken: json.data.editToken,
+        });
+      }
     } catch {
       setServerError("Network error. Please check your connection and try again.");
     } finally {
@@ -168,18 +206,16 @@ export const RunForm = () => {
     }
   };
 
-  const editUrl =
-    success &&
-    `${window.location.origin}/runs/${success.id}/edit?token=${success.editToken}`;
+  // Create mode success: show edit link
+  if (success && success.editToken) {
+    const editUrl = `${window.location.origin}/runs/${success.id}/edit?token=${success.editToken}`;
 
-  const handleCopy = async () => {
-    if (!editUrl) return;
-    await navigator.clipboard.writeText(editUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+    const handleCopy = async () => {
+      await navigator.clipboard.writeText(editUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    };
 
-  if (success && editUrl) {
     return (
       <div className="mt-6 space-y-6">
         <div className="text-center">
@@ -233,8 +269,89 @@ export const RunForm = () => {
     );
   }
 
+  // Edit mode success: simple confirmation
+  if (success && mode === "edit") {
+    return (
+      <div className="mt-6 space-y-6">
+        <div className="text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <svg
+              className="h-6 w-6 text-green-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+          </div>
+          <h2 className="mt-3 text-2xl font-bold text-brand-navy">
+            Run updated!
+          </h2>
+        </div>
+
+        <div className="flex gap-3">
+          <Link
+            href={`/runs/${success.id}`}
+            className="flex-1 rounded-md bg-brand-purple px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:opacity-90"
+          >
+            View your run
+          </Link>
+          <Link
+            href="/"
+            className="flex-1 rounded-md border border-gray-300 px-4 py-2 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            Back to map
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="mt-4 space-y-5">
+      {/* Active/Inactive Toggle (edit mode only) */}
+      {mode === "edit" && (
+        <div className="rounded-lg border border-gray-200 p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-700">Run Status</p>
+              <p className="text-xs text-gray-500">
+                {isActive
+                  ? "This run is visible on the map."
+                  : "This run is hidden from the map."}
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isActive}
+              onClick={() => setIsActive(!isActive)}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
+                isActive ? "bg-green-500" : "bg-gray-300"
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  isActive ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+          {!isActive && (
+            <div className="mt-2 rounded-md bg-yellow-50 px-3 py-2">
+              <p className="text-xs text-yellow-800">
+                Runners will not be able to find this run while it is inactive.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
       {serverError && (
         <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
           {serverError}
@@ -536,7 +653,13 @@ export const RunForm = () => {
         disabled={isSubmitting}
         className="w-full rounded-md bg-brand-purple px-4 py-3 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50"
       >
-        {isSubmitting ? "Submitting..." : "Submit Run"}
+        {mode === "edit"
+          ? isSubmitting
+            ? "Saving..."
+            : "Save Changes"
+          : isSubmitting
+            ? "Submitting..."
+            : "Submit Run"}
       </button>
     </form>
   );

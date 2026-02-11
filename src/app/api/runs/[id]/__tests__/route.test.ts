@@ -110,6 +110,60 @@ describe("GET /api/runs/[id]", () => {
   });
 });
 
+describe("GET /api/runs/[id] with token", () => {
+  it("returns inactive run when valid token is provided", async () => {
+    mockWhere.mockResolvedValue([{ ...mockRun, isActive: false }]);
+
+    const request = new NextRequest(
+      "http://localhost/api/runs/1?token=secret-token-123"
+    );
+    const response = await GET(request, { params: makeParams("1") });
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json.data.name).toBe("Bethesda Tuesday Track");
+    expect(json.data.isActive).toBe(false);
+    expect(json.data).not.toHaveProperty("editToken");
+  });
+
+  it("returns 404 for inactive run with invalid token", async () => {
+    mockWhere.mockResolvedValue([{ ...mockRun, isActive: false }]);
+
+    const request = new NextRequest(
+      "http://localhost/api/runs/1?token=wrong-token"
+    );
+    const response = await GET(request, { params: makeParams("1") });
+    const json = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(json.error).toBe("Run not found");
+  });
+
+  it("returns 404 for inactive run with no token", async () => {
+    mockWhere.mockResolvedValue([{ ...mockRun, isActive: false }]);
+
+    const request = new NextRequest("http://localhost/api/runs/1");
+    const response = await GET(request, { params: makeParams("1") });
+    const json = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(json.error).toBe("Run not found");
+  });
+
+  it("returns active run regardless of token presence", async () => {
+    mockWhere.mockResolvedValue([mockRun]);
+
+    const request = new NextRequest(
+      "http://localhost/api/runs/1?token=any-token"
+    );
+    const response = await GET(request, { params: makeParams("1") });
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json.data.name).toBe("Bethesda Tuesday Track");
+  });
+});
+
 describe("PUT /api/runs/[id]", () => {
   it("succeeds with valid token and valid body", async () => {
     mockWhere.mockResolvedValue([mockRun]);
