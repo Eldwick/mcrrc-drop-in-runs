@@ -2,12 +2,10 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #302F2B;
+  --foreground: #333333;
   --brand-navy: #0D0D3B;
-  --brand-navy-light: #192a3d;
-  --brand-steel: #3A4F66;
-  --brand-orange: #F58634;
-  --brand-orange-dark: #fe6a00;
+  --brand-purple: #402277;
+  --brand-orange: #E97E12;
   --brand-gray: #f2f5f7;
 }
 
@@ -15,10 +13,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-brand-navy: var(--brand-navy);
-  --color-brand-navy-light: var(--brand-navy-light);
-  --color-brand-steel: var(--brand-steel);
+  --color-brand-purple: var(--brand-purple);
   --color-brand-orange: var(--brand-orange);
-  --color-brand-orange-dark: var(--brand-orange-dark);
   --color-brand-gray: var(--brand-gray);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

@@ -39,7 +39,7 @@ export const LocationSearch = ({
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder="Enter address or zip code"
-            className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange"
+            className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
           />
           {hasLocation && (
             <button
@@ -55,7 +55,7 @@ export const LocationSearch = ({
         <button
           type="submit"
           disabled={isGeocoding || !query.trim()}
-          className="flex h-11 w-11 items-center justify-center rounded-md bg-brand-orange text-white hover:bg-brand-orange-dark disabled:bg-gray-300"
+          className="flex h-11 w-11 items-center justify-center rounded-md bg-brand-purple text-white hover:bg-brand-orange disabled:bg-gray-300"
           aria-label="Search location"
         >
           {isGeocoding ? (

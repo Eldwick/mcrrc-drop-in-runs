@@ -20,7 +20,7 @@ export const RunCardList = ({
     <div className="space-y-2 bg-brand-gray px-3 py-3">
       {rankedRuns === null ? (
         <>
-          <p className="rounded-md bg-orange-50 px-3 py-2 text-center text-sm text-brand-orange-dark">
+          <p className="rounded-md bg-purple-50 px-3 py-2 text-center text-sm text-brand-purple">
             Enter your location and pace to see the best runs for you
           </p>
           {runs.map((run) => (

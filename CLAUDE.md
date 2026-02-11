@@ -167,26 +167,26 @@ No other API keys are needed. The entire stack is free-tier.
 
 The app follows the MCRRC brand identity from mcrrc.org. The tagline is **"A Place For Every Pace"**.
 
-### Brand Colors
+### Brand Colors (from mcrrc.org)
 
 | Role | Hex | CSS Variable | Tailwind Class |
 |------|-----|-------------|----------------|
-| Primary dark (nav, headings) | `#0D0D3B` | `--brand-navy` | `brand-navy` |
-| Tertiary dark | `#192a3d` | `--brand-navy-light` | `brand-navy-light` |
-| Secondary dark | `#3A4F66` | `--brand-steel` | `brand-steel` |
-| Accent / CTA | `#F58634` | `--brand-orange` | `brand-orange` |
-| Heading accent / hover | `#fe6a00` | `--brand-orange-dark` | `brand-orange-dark` |
+| Primary dark (nav, header bg) | `#0D0D3B` | `--brand-navy` | `brand-navy` |
+| Accent purple (Join Us, key CTAs) | `#402277` | `--brand-purple` | `brand-purple` |
+| Accent orange (secondary CTA, highlights) | `#E97E12` | `--brand-orange` | `brand-orange` |
 | Light background | `#f2f5f7` | `--brand-gray` | `brand-gray` |
-| Body text | `#302F2B` | `--foreground` | `foreground` |
+| Body text | `#333333` | `--foreground` | `foreground` |
 | White | `#ffffff` | `--background` | `background` |
 
 ### Color Usage Rules
 
-- **Interactive elements** (buttons, selected states, focus rings): Use `brand-orange` as the primary color, `brand-orange-dark` for hover states.
-- **Text links and headings**: Use `brand-navy` as the default, `brand-orange` on hover.
-- **Secondary text** (labels, helper text): Use `brand-steel`.
-- **Light backgrounds** (card list areas, unselected controls): Use `brand-gray`.
-- **Semantic colors** (terrain badges, pace match indicators): Keep standard Tailwind green/yellow/gray — these are informational, not brand-specific.
+- **Primary buttons and CTAs** (selected pace pills, Submit Run, main actions): Use `brand-purple`. This matches the "Join Us" button on mcrrc.org.
+- **Secondary accents and highlights** (terrain badges, hover states, the "Add a Run" link, emphasis): Use `brand-orange`.
+- **Nav and header backgrounds**: Use `brand-navy` (very dark, nearly black).
+- **Text links**: Use `brand-purple` default, `brand-orange` on hover.
+- **Secondary text** (labels, helper text, muted info): Use Tailwind `gray-500` or `gray-600`.
+- **Light backgrounds** (card areas, bottom sheet, search bar): Use `brand-gray` or white.
+- **Semantic colors** (pace match indicators): Keep standard Tailwind green/yellow/gray — these are informational, not brand-specific.
 - **Never use default Tailwind blue** (`blue-500`, `blue-600`, etc.) for interactive elements. Always use the custom brand colors above.
 - The app has no dark mode. MCRRC's site does not use dark mode.
 

@@ -44,14 +44,14 @@ export const RunCard = ({
       id={`run-card-${run.id}`}
       onClick={() => onSelect(run.id)}
       className={`cursor-pointer rounded-lg border bg-white p-3 transition-shadow hover:shadow-md ${
-        isSelected ? "ring-2 ring-brand-orange border-orange-300" : "border-gray-200"
+        isSelected ? "ring-2 ring-brand-purple border-purple-300" : "border-gray-200"
       }`}
     >
       <div className="flex items-start justify-between gap-2">
         <Link
           href={`/runs/${run.id}`}
           onClick={(e) => e.stopPropagation()}
-          className="text-sm font-semibold text-brand-navy hover:text-brand-orange hover:underline"
+          className="text-sm font-semibold text-brand-purple hover:text-brand-orange hover:underline"
         >
           {run.name}
         </Link>

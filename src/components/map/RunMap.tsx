@@ -125,7 +125,7 @@ export const RunMap = ({
           center={[userLocation.lat, userLocation.lng]}
           radius={10}
           pathOptions={{
-            fillColor: "#F58634",
+            fillColor: "#E97E12",
             fillOpacity: 1,
             color: "#ffffff",
             weight: 3,
@@ -148,7 +148,7 @@ export const RunMap = ({
             <div className="min-w-[180px]">
               <Link
                 href={`/runs/${run.id}`}
-                className="text-base font-semibold text-brand-navy hover:text-brand-orange hover:underline"
+                className="text-base font-semibold text-brand-purple hover:text-brand-orange hover:underline"
               >
                 {run.name}
               </Link>
