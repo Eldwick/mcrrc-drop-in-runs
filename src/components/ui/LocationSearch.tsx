@@ -65,7 +65,7 @@ export const LocationSearch = ({
             placeholder="e.g., 20814 or Bethesda"
             aria-label="Search location"
             autoFocus={autoFocus}
-            className="h-11 w-full rounded-md border border-gray-300 pl-9 pr-10 text-sm focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
+            className="h-11 w-full rounded-md border border-gray-300 pl-9 pr-10 text-base focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
           />
           {isGeocoding ? (
             <div className="absolute right-2 top-1/2 -translate-y-1/2">
