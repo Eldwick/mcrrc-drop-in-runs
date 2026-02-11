@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import type { GeocodeResult } from "@/lib/types/run";
 
 interface LocationSearchProps {
@@ -27,9 +28,41 @@ export const LocationSearch = ({
   hasLocation,
   autoFocus,
 }: LocationSearchProps) => {
+  const [highlightIndex, setHighlightIndex] = useState(-1);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(query);
+    if (geocodeResults.length > 0) {
+      const idx = highlightIndex >= 0 ? highlightIndex : 0;
+      onSelectResult(geocodeResults[idx]);
+      setHighlightIndex(-1);
+    } else {
+      onSearch(query);
+    }
+  };
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (geocodeResults.length === 0) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setHighlightIndex((prev) =>
+          prev < geocodeResults.length - 1 ? prev + 1 : 0
+        );
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setHighlightIndex((prev) =>
+          prev > 0 ? prev - 1 : geocodeResults.length - 1
+        );
+      }
+    },
+    [geocodeResults.length]
+  );
+
+  const handleQueryChange = (value: string) => {
+    setHighlightIndex(-1);
+    onQueryChange(value);
   };
 
   return (
@@ -61,9 +94,19 @@ export const LocationSearch = ({
             id="location-input"
             type="text"
             value={query}
-            onChange={(e) => onQueryChange(e.target.value)}
+            onChange={(e) => handleQueryChange(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="e.g., 20814 or Bethesda"
             aria-label="Search location"
+            role="combobox"
+            aria-expanded={geocodeResults.length > 0}
+            aria-activedescendant={
+              highlightIndex >= 0
+                ? `location-option-${highlightIndex}`
+                : undefined
+            }
+            aria-autocomplete="list"
+            aria-controls="location-listbox"
             autoFocus={autoFocus}
             className="h-11 w-full rounded-md border border-gray-300 pl-9 pr-10 text-base focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
           />
@@ -108,13 +151,29 @@ export const LocationSearch = ({
       )}
 
       {geocodeResults.length > 0 && (
-        <ul className="absolute left-0 right-0 z-[1000] mt-1 max-h-48 overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul
+          id="location-listbox"
+          role="listbox"
+          className="absolute left-0 right-0 z-[1000] mt-1 max-h-48 overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg"
+        >
           {geocodeResults.map((result, i) => (
-            <li key={i}>
+            <li
+              key={i}
+              id={`location-option-${i}`}
+              role="option"
+              aria-selected={i === highlightIndex}
+            >
               <button
                 type="button"
-                onClick={() => onSelectResult(result)}
-                className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-orange-50"
+                onClick={() => {
+                  onSelectResult(result);
+                  setHighlightIndex(-1);
+                }}
+                className={`w-full px-3 py-2 text-left text-sm text-gray-700 ${
+                  i === highlightIndex
+                    ? "bg-orange-50"
+                    : "hover:bg-orange-50"
+                }`}
               >
                 {result.displayName}
               </button>
