@@ -1,15 +1,15 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import Link from "next/link";
+import { useCallback } from "react";
 import { useSeekerState } from "@/hooks/useSeekerState";
 import { FloatingSearchBar } from "@/components/ui/FloatingSearchBar";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { DynamicRunMap } from "@/components/map/DynamicRunMap";
 import { RunCardList } from "@/components/ui/RunCardList";
 import type { RunResponse, GeocodeResult, PaceRange, RankedRun } from "@/lib/types/run";
+import type { SheetSnapState } from "@/hooks/useSeekerState";
 
-type SnapState = "collapsed" | "half" | "full";
+const HEADER_HEIGHT = 49;
 
 interface SeekerViewProps {
   runs: RunResponse[];
@@ -26,7 +26,6 @@ function getSummaryText(
 
 export const SeekerView = ({ runs }: SeekerViewProps) => {
   const { state, dispatch, rankedRuns, geocodeAddress } = useSeekerState(runs);
-  const [sheetState, setSheetState] = useState<SnapState>("collapsed");
 
   const handleLocationQueryChange = useCallback(
     (query: string) => {
@@ -78,9 +77,6 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
   const handleMarkerClick = useCallback(
     (runId: number) => {
       dispatch({ type: "SELECT_RUN", runId });
-      if (sheetState === "collapsed") {
-        setSheetState("half");
-      }
       setTimeout(() => {
         const el = document.getElementById(`run-card-${runId}`);
         if (el) {
@@ -88,7 +84,7 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
         }
       }, 350);
     },
-    [dispatch, sheetState]
+    [dispatch]
   );
 
   const handleCardSelect = useCallback(
@@ -98,10 +94,20 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
     [dispatch]
   );
 
+  const handleSheetStateChange = useCallback(
+    (sheetState: SheetSnapState) => {
+      dispatch({ type: "SET_SHEET_STATE", sheetState });
+    },
+    [dispatch]
+  );
+
   return (
     <>
-      {/* Layer 1: Full-screen map */}
-      <div className="fixed inset-0 z-0">
+      {/* Layer 1: Full-screen map below header */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-0"
+        style={{ top: HEADER_HEIGHT }}
+      >
         <DynamicRunMap
           runs={runs}
           userLocation={state.userLocation}
@@ -112,27 +118,32 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
       </div>
 
       {/* Layer 2: Floating search bar */}
-      <FloatingSearchBar
-        locationQuery={state.locationQuery}
-        onLocationQueryChange={handleLocationQueryChange}
-        onSearch={handleSearch}
-        geocodeResults={state.geocodeResults}
-        isGeocoding={state.isGeocoding}
-        geocodeError={state.geocodeError}
-        onSelectGeoResult={handleSelectGeoResult}
-        onClearLocation={handleClearLocation}
-        hasLocation={state.userLocation !== null}
-        selectedPace={state.selectedPace}
-        onSelectPace={handleSelectPace}
-        locationDisplayName={
-          state.userLocation ? state.locationQuery : null
-        }
-      />
+      <div
+        className="fixed left-4 right-4 z-20 mx-auto max-w-lg"
+        style={{ top: HEADER_HEIGHT + 24 }}
+      >
+        <FloatingSearchBar
+          locationQuery={state.locationQuery}
+          onLocationQueryChange={handleLocationQueryChange}
+          onSearch={handleSearch}
+          geocodeResults={state.geocodeResults}
+          isGeocoding={state.isGeocoding}
+          geocodeError={state.geocodeError}
+          onSelectGeoResult={handleSelectGeoResult}
+          onClearLocation={handleClearLocation}
+          hasLocation={state.userLocation !== null}
+          selectedPace={state.selectedPace}
+          onSelectPace={handleSelectPace}
+          locationDisplayName={
+            state.userLocation ? state.locationQuery : null
+          }
+        />
+      </div>
 
       {/* Layer 3: Bottom sheet with cards */}
       <BottomSheet
-        snapState={sheetState}
-        onSnapStateChange={setSheetState}
+        snapState={state.sheetState}
+        onSnapStateChange={handleSheetStateChange}
         summary={getSummaryText(rankedRuns, runs)}
       >
         <RunCardList
@@ -142,14 +153,6 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
           onSelectRun={handleCardSelect}
         />
       </BottomSheet>
-
-      {/* Layer 4: Floating "Add a Run" button */}
-      <Link
-        href="/runs/new"
-        className="fixed right-4 top-4 z-20 rounded-full bg-brand-purple px-4 py-2 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-brand-orange"
-      >
-        + Add a Run
-      </Link>
     </>
   );
 };

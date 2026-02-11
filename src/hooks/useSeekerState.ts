@@ -4,6 +4,8 @@ import { useReducer, useMemo, useCallback } from "react";
 import { rankRuns } from "@/lib/utils/ranking";
 import type { RunResponse, PaceRange, RankedRun, GeocodeResult } from "@/lib/types/run";
 
+export type SheetSnapState = "collapsed" | "half" | "full";
+
 interface SeekerState {
   locationQuery: string;
   userLocation: { lat: number; lng: number } | null;
@@ -12,6 +14,7 @@ interface SeekerState {
   geocodeResults: GeocodeResult[];
   isGeocoding: boolean;
   geocodeError: string | null;
+  sheetState: SheetSnapState;
 }
 
 type SeekerAction =
@@ -22,9 +25,10 @@ type SeekerAction =
   | { type: "GEOCODE_START" }
   | { type: "GEOCODE_SUCCESS"; results: GeocodeResult[] }
   | { type: "GEOCODE_ERROR"; error: string }
-  | { type: "CLEAR_LOCATION" };
+  | { type: "CLEAR_LOCATION" }
+  | { type: "SET_SHEET_STATE"; sheetState: SheetSnapState };
 
-const initialState: SeekerState = {
+export const initialState: SeekerState = {
   locationQuery: "",
   userLocation: null,
   selectedPace: null,
@@ -32,24 +36,44 @@ const initialState: SeekerState = {
   geocodeResults: [],
   isGeocoding: false,
   geocodeError: null,
+  sheetState: "collapsed",
 };
 
-function seekerReducer(state: SeekerState, action: SeekerAction): SeekerState {
+export function seekerReducer(state: SeekerState, action: SeekerAction): SeekerState {
   switch (action.type) {
     case "SET_LOCATION_QUERY":
       return { ...state, locationQuery: action.query, geocodeError: null };
-    case "SET_USER_LOCATION":
-      return {
+    case "SET_USER_LOCATION": {
+      const newState = {
         ...state,
         userLocation: action.location,
         locationQuery: action.displayName ?? state.locationQuery,
         geocodeResults: [],
         geocodeError: null,
       };
-    case "SET_SELECTED_PACE":
-      return { ...state, selectedPace: action.pace };
-    case "SELECT_RUN":
-      return { ...state, selectedRunId: action.runId };
+      // Auto-open sheet when both location and pace are now set
+      if (state.selectedPace && !state.userLocation && newState.sheetState === "collapsed") {
+        newState.sheetState = "half";
+      }
+      return newState;
+    }
+    case "SET_SELECTED_PACE": {
+      const newState = { ...state, selectedPace: action.pace };
+      // Auto-open sheet when both location and pace are now set
+      if (state.userLocation && !state.selectedPace && newState.sheetState === "collapsed") {
+        newState.sheetState = "half";
+      }
+      return newState;
+    }
+    case "SELECT_RUN": {
+      const newState = { ...state, selectedRunId: action.runId };
+      if (newState.sheetState === "collapsed") {
+        newState.sheetState = "half";
+      }
+      return newState;
+    }
+    case "SET_SHEET_STATE":
+      return { ...state, sheetState: action.sheetState };
     case "GEOCODE_START":
       return { ...state, isGeocoding: true, geocodeError: null, geocodeResults: [] };
     case "GEOCODE_SUCCESS":

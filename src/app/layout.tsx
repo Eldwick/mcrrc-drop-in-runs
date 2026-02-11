@@ -29,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="flex items-center justify-between bg-brand-navy px-4 py-3">
+        <header className="sticky top-0 z-30 flex items-center justify-between bg-brand-navy px-4 py-3">
           <Link href="/" className="flex flex-col">
             <span className="text-lg font-bold text-white">
               MCRRC Run Finder

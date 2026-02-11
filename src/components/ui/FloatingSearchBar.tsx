@@ -93,7 +93,7 @@ export const FloatingSearchBar = ({
   return (
     <div
       ref={barRef}
-      className="fixed top-4 left-4 right-4 z-20 mx-auto max-w-lg"
+      className="relative"
     >
       <div className="rounded-2xl bg-white shadow-lg">
         {isExpanded ? (
@@ -134,7 +134,7 @@ export const FloatingSearchBar = ({
               />
             </svg>
             <span className="truncate text-sm text-gray-600">
-              {summaryText ?? "Where are you?"}
+              {summaryText ?? "Where do you want to run?"}
             </span>
           </button>
         )}

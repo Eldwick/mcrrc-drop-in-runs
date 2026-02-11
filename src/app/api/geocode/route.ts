@@ -23,11 +23,16 @@ export async function GET(request: NextRequest) {
   }
   lastRequestTime = Date.now();
 
+  // Bounding box for Montgomery County, MD area
+  // viewbox format: west,south,east,north
   const params = new URLSearchParams({
     q: q.trim(),
     format: "json",
     limit: MAX_RESULTS.toString(),
     addressdetails: "1",
+    countrycodes: "us",
+    viewbox: "-77.53,38.93,-76.88,39.35",
+    bounded: "1",
   });
 
   const response = await fetch(`${NOMINATIM_URL}?${params.toString()}`, {

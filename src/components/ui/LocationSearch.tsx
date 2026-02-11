@@ -53,7 +53,7 @@ export const LocationSearch = ({
             type="text"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Where are you?"
+            placeholder="Zip code or address"
             className="h-11 w-full rounded-md border border-gray-300 pl-9 pr-8 text-sm focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
           />
           {hasLocation && (
