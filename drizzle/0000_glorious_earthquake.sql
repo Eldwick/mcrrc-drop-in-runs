@@ -1,0 +1,21 @@
+CREATE TABLE "runs" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"day_of_week" text NOT NULL,
+	"start_time" text NOT NULL,
+	"location_name" text NOT NULL,
+	"latitude" numeric NOT NULL,
+	"longitude" numeric NOT NULL,
+	"typical_distances" text NOT NULL,
+	"terrain" text NOT NULL,
+	"pace_groups" jsonb NOT NULL,
+	"contact_name" text,
+	"contact_email" text,
+	"contact_phone" text,
+	"notes" text,
+	"is_active" boolean DEFAULT true NOT NULL,
+	"edit_token" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "runs_edit_token_unique" UNIQUE("edit_token")
+);
