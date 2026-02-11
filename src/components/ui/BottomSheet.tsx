@@ -134,7 +134,7 @@ export const BottomSheet = ({
     >
       {/* Handle area */}
       <div
-        className="flex shrink-0 cursor-pointer flex-col items-center rounded-t-2xl pb-2 pt-3 touch-none select-none transition-colors active:bg-gray-100"
+        className="flex shrink-0 cursor-pointer flex-col items-center rounded-t-2xl border-b border-gray-200 bg-gray-50 pb-3 pt-3 touch-none select-none transition-colors active:bg-gray-100"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -142,7 +142,7 @@ export const BottomSheet = ({
       >
         <div className="h-1.5 w-12 rounded-full bg-gray-400" />
         <div className="mt-2 flex items-center gap-1.5">
-          <p className="text-sm font-medium text-gray-600">{summary}</p>
+          <p className="text-sm font-semibold text-brand-navy">{summary}</p>
           <svg
             className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${
               snapState !== "collapsed" ? "rotate-180" : ""
