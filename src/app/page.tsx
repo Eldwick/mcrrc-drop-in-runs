@@ -4,6 +4,8 @@ import { runs } from "@/lib/db/schema";
 import { SeekerView } from "@/components/SeekerView";
 import type { RunResponse, PaceGroupInput } from "@/lib/types/run";
 
+export const dynamic = "force-dynamic";
+
 async function getActiveRuns(): Promise<RunResponse[]> {
   const rows = await db.select().from(runs).where(eq(runs.isActive, true));
 

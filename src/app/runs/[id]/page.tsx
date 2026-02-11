@@ -3,6 +3,8 @@ import { eq, and } from "drizzle-orm";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { runs } from "@/lib/db/schema";
+
+export const dynamic = "force-dynamic";
 import type { PaceGroupInput, PaceRange } from "@/lib/types/run";
 import type { AvailabilityLevel } from "@/lib/utils/scoring";
 import { DynamicDetailMap } from "@/components/map/DynamicDetailMap";
