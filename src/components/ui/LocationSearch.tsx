@@ -54,6 +54,7 @@ export const LocationSearch = ({
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder="Zip code or address"
+            aria-label="Search location"
             className="h-11 w-full rounded-md border border-gray-300 pl-9 pr-10 text-sm focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
           />
           {isGeocoding ? (

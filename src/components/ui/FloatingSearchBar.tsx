@@ -126,6 +126,7 @@ export const FloatingSearchBar = ({
               viewBox="0 0 20 20"
               fill="currentColor"
               className="h-5 w-5 shrink-0 text-brand-purple"
+              aria-hidden="true"
             >
               <path
                 fillRule="evenodd"
