@@ -82,10 +82,10 @@ export const FloatingSearchBar = ({
 
   const summaryText = (() => {
     if (locationDisplayName && selectedPace) {
-      return `${locationDisplayName} - ${PACE_RANGE_LABELS[selectedPace]}`;
+      return `${locationDisplayName} \u2014 ${PACE_RANGE_LABELS[selectedPace]}`;
     }
     if (locationDisplayName) {
-      return locationDisplayName;
+      return `${locationDisplayName} \u2014 tap to select pace`;
     }
     return null;
   })();
@@ -113,6 +113,7 @@ export const FloatingSearchBar = ({
               <PaceSelector
                 selectedPace={selectedPace}
                 onSelectPace={handleSelectPace}
+                highlight={hasLocation}
               />
             </div>
           </div>
@@ -134,7 +135,9 @@ export const FloatingSearchBar = ({
                 clipRule="evenodd"
               />
             </svg>
-            <span className="truncate text-sm text-gray-600">
+            <span className={`truncate text-sm ${
+              locationDisplayName && !selectedPace ? "text-brand-orange" : "text-gray-600"
+            }`}>
               {summaryText ?? "Where do you want to run?"}
             </span>
           </button>

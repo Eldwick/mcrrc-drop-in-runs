@@ -8,12 +8,19 @@ const paceRangeKeys: PaceRange[] = ["sub_8", "8_to_9", "9_to_10", "10_plus"];
 interface PaceSelectorProps {
   selectedPace: PaceRange | null;
   onSelectPace: (pace: PaceRange) => void;
+  highlight?: boolean;
 }
 
-export const PaceSelector = ({ selectedPace, onSelectPace }: PaceSelectorProps) => {
+export const PaceSelector = ({ selectedPace, onSelectPace, highlight }: PaceSelectorProps) => {
   return (
     <div>
-      <p className="mb-1.5 text-xs font-medium text-gray-500">Your pace (min/mile)</p>
+      <p className={`mb-1.5 text-xs font-medium ${
+        highlight && !selectedPace
+          ? "text-brand-orange"
+          : "text-gray-500"
+      }`}>
+        {highlight && !selectedPace ? "Select your pace (min/mile)" : "Your pace (min/mile)"}
+      </p>
       <div className="grid grid-cols-4 gap-1">
         {paceRangeKeys.map((pace) => (
         <button
