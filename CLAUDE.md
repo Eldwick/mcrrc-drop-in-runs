@@ -163,6 +163,33 @@ NEXT_PUBLIC_APP_URL=    # Base URL of the deployed app (for generating edit link
 
 No other API keys are needed. The entire stack is free-tier.
 
+## Brand & Visual Style
+
+The app follows the MCRRC brand identity from mcrrc.org. The tagline is **"A Place For Every Pace"**.
+
+### Brand Colors
+
+| Role | Hex | CSS Variable | Tailwind Class |
+|------|-----|-------------|----------------|
+| Primary dark (nav, headings) | `#0D0D3B` | `--brand-navy` | `brand-navy` |
+| Tertiary dark | `#192a3d` | `--brand-navy-light` | `brand-navy-light` |
+| Secondary dark | `#3A4F66` | `--brand-steel` | `brand-steel` |
+| Accent / CTA | `#F58634` | `--brand-orange` | `brand-orange` |
+| Heading accent / hover | `#fe6a00` | `--brand-orange-dark` | `brand-orange-dark` |
+| Light background | `#f2f5f7` | `--brand-gray` | `brand-gray` |
+| Body text | `#302F2B` | `--foreground` | `foreground` |
+| White | `#ffffff` | `--background` | `background` |
+
+### Color Usage Rules
+
+- **Interactive elements** (buttons, selected states, focus rings): Use `brand-orange` as the primary color, `brand-orange-dark` for hover states.
+- **Text links and headings**: Use `brand-navy` as the default, `brand-orange` on hover.
+- **Secondary text** (labels, helper text): Use `brand-steel`.
+- **Light backgrounds** (card list areas, unselected controls): Use `brand-gray`.
+- **Semantic colors** (terrain badges, pace match indicators): Keep standard Tailwind green/yellow/gray — these are informational, not brand-specific.
+- **Never use default Tailwind blue** (`blue-500`, `blue-600`, etc.) for interactive elements. Always use the custom brand colors above.
+- The app has no dark mode. MCRRC's site does not use dark mode.
+
 ## Important Rules
 
 - NEVER install or use Google Maps. Use Leaflet + OpenStreetMap only.

@@ -29,13 +29,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3">
-          <Link href="/" className="text-lg font-bold text-gray-900">
-            MCRRC Run Finder
+        <header className="flex items-center justify-between border-b-2 border-brand-navy bg-white px-4 py-3">
+          <Link href="/" className="flex flex-col">
+            <span className="text-lg font-bold text-brand-navy">
+              MCRRC Run Finder
+            </span>
+            <span className="text-xs text-brand-steel">
+              A Place For Every Pace
+            </span>
           </Link>
           <Link
             href="/runs/new"
-            className="text-sm text-gray-600 hover:text-gray-900"
+            className="text-sm font-medium text-brand-steel hover:text-brand-orange"
           >
             Add a Run
           </Link>

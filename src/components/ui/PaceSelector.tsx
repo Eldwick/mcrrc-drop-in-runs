@@ -24,8 +24,8 @@ export const PaceSelector = ({ selectedPace, onSelectPace }: PaceSelectorProps) 
             onClick={() => onSelectPace(pace)}
             className={`rounded-md px-2 py-2 text-xs font-medium transition-colors ${
               selectedPace === pace
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                ? "bg-brand-orange text-white"
+                : "bg-brand-gray text-brand-steel hover:bg-gray-200"
             }`}
           >
             {PACE_RANGE_LABELS[pace]}
