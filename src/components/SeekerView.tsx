@@ -74,24 +74,39 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
     [dispatch]
   );
 
+  const scrollCardIntoView = useCallback((runId: number) => {
+    setTimeout(() => {
+      const card = document.getElementById(`run-card-${runId}`);
+      if (!card) return;
+      const scrollContainer = card.closest(
+        "[data-bottom-sheet-scroll]"
+      ) as HTMLElement | null;
+      if (!scrollContainer) return;
+      // Use bounding rects to get the card's actual position relative to
+      // the scroll container, since the container is much taller than the
+      // visible collapsed peek area and scrollIntoView can't account for that.
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+      const offset =
+        cardRect.top - containerRect.top + scrollContainer.scrollTop;
+      scrollContainer.scrollTo({ top: offset - 8, behavior: "smooth" });
+    }, 400);
+  }, []);
+
   const handleMarkerClick = useCallback(
     (runId: number) => {
       dispatch({ type: "SELECT_RUN", runId });
-      setTimeout(() => {
-        const el = document.getElementById(`run-card-${runId}`);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }, 350);
+      scrollCardIntoView(runId);
     },
-    [dispatch]
+    [dispatch, scrollCardIntoView]
   );
 
   const handleCardSelect = useCallback(
     (runId: number) => {
       dispatch({ type: "SELECT_RUN", runId });
+      scrollCardIntoView(runId);
     },
-    [dispatch]
+    [dispatch, scrollCardIntoView]
   );
 
   const handleSheetStateChange = useCallback(
@@ -146,7 +161,7 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
         snapState={state.sheetState}
         onSnapStateChange={handleSheetStateChange}
         summary={getSummaryText(rankedRuns, runs)}
-        collapsedHeight={state.selectedRunId !== null ? 200 : undefined}
+        collapsedHeight={state.selectedRunId !== null ? 250 : undefined}
       >
         <RunCardList
           runs={runs}

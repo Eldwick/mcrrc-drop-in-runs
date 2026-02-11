@@ -5,7 +5,6 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  Popup,
   CircleMarker,
   Tooltip,
   useMap,
@@ -13,7 +12,6 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import Link from "next/link";
 import type { RunResponse } from "@/lib/types/run";
 
 const DEFAULT_CENTER: [number, number] = [39.14, -77.15];
@@ -144,22 +142,7 @@ export const RunMap = ({
           eventHandlers={{
             click: () => onMarkerClick?.(run.id),
           }}
-        >
-          <Popup>
-            <div className="min-w-[180px]">
-              <Link
-                href={`/runs/${run.id}`}
-                className="text-base font-semibold text-brand-purple hover:text-brand-orange hover:underline"
-              >
-                {run.name}
-              </Link>
-              <p className="mt-1 text-sm text-gray-600">
-                {run.dayOfWeek}s at {run.startTime}
-              </p>
-              <p className="text-sm text-gray-600">{run.terrain}</p>
-            </div>
-          </Popup>
-        </Marker>
+        />
       ))}
     </MapContainer>
   );

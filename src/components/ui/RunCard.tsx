@@ -86,6 +86,17 @@ export const RunCard = ({
           {run.notes.length > 80 ? `${run.notes.slice(0, 80)}...` : run.notes}
         </p>
       )}
+
+      {isSelected && (
+        <Link
+          href={`/runs/${run.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="mt-2 flex items-center justify-center gap-1 rounded-md bg-brand-purple py-2 text-sm font-semibold text-white hover:bg-brand-orange"
+        >
+          View Details
+          <span aria-hidden="true">&rarr;</span>
+        </Link>
+      )}
     </div>
   );
 };
