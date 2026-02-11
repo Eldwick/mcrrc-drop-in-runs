@@ -32,7 +32,7 @@ export default async function Home() {
   const activeRuns = await getActiveRuns();
 
   return (
-    <main>
+    <main className="h-screen overflow-hidden">
       <SeekerView runs={activeRuns} />
     </main>
   );

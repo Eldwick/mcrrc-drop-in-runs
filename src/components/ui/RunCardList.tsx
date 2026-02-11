@@ -17,7 +17,7 @@ export const RunCardList = ({
   onSelectRun,
 }: RunCardListProps) => {
   return (
-    <div className="space-y-2 bg-brand-gray px-3 py-3">
+    <div className="space-y-2 py-1">
       {rankedRuns === null ? (
         <>
           <p className="rounded-md bg-purple-50 px-3 py-2 text-center text-sm text-brand-purple">

@@ -32,14 +32,29 @@ export const LocationSearch = ({
 
   return (
     <div className="relative">
-      <form onSubmit={handleSubmit} className="flex gap-1">
-        <div className="relative flex-1">
+      <form onSubmit={handleSubmit}>
+        <div className="relative">
+          {/* Pin icon prefix */}
+          <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-brand-purple">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="h-4 w-4"
+            >
+              <path
+                fillRule="evenodd"
+                d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.274 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
           <input
             type="text"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Enter address or zip code"
-            className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
+            placeholder="Where are you?"
+            className="h-11 w-full rounded-md border border-gray-300 pl-9 pr-8 text-sm focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
           />
           {hasLocation && (
             <button
@@ -51,30 +66,12 @@ export const LocationSearch = ({
               ✕
             </button>
           )}
-        </div>
-        <button
-          type="submit"
-          disabled={isGeocoding || !query.trim()}
-          className="flex h-11 w-11 items-center justify-center rounded-md bg-brand-purple text-white hover:bg-brand-orange disabled:bg-gray-300"
-          aria-label="Search location"
-        >
-          {isGeocoding ? (
-            <span className="text-sm">...</span>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="h-5 w-5"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                clipRule="evenodd"
-              />
-            </svg>
+          {isGeocoding && (
+            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+              <span className="text-sm text-gray-400">...</span>
+            </div>
           )}
-        </button>
+        </div>
       </form>
 
       {geocodeError && (

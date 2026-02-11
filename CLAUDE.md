@@ -190,6 +190,18 @@ The app follows the MCRRC brand identity from mcrrc.org. The tagline is **"A Pla
 - **Never use default Tailwind blue** (`blue-500`, `blue-600`, etc.) for interactive elements. Always use the custom brand colors above.
 - The app has no dark mode. MCRRC's site does not use dark mode.
 
+### Home Page Layout
+
+The home page uses a **layered layout** (Google Maps-style):
+
+- **Layer 0:** `layout.tsx` header — still rendered but hidden behind the fixed map
+- **Layer 1:** Full-screen Leaflet map (`position: fixed; inset: 0; z-index: 0`)
+- **Layer 2:** Floating search bar (`position: fixed; top; z-index: 20`) — collapsible pill that expands to show LocationSearch + PaceSelector
+- **Layer 3:** Draggable bottom sheet (`position: fixed; bottom; z-index: 10`) — three snap points: collapsed (70px peek), half (50vh), full (100vh - 40px)
+- **Layer 4:** Floating "Add a Run" button (`position: fixed; top-right; z-index: 20`)
+
+Other pages (`/runs/new`, `/runs/[id]`, `/runs/[id]/edit`) use standard flow layout — the `layout.tsx` header remains visible.
+
 ## Important Rules
 
 - NEVER install or use Google Maps. Use Leaflet + OpenStreetMap only.
