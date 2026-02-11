@@ -105,6 +105,7 @@ export const RunMap = ({
     <MapContainer
       center={DEFAULT_CENTER}
       zoom={DEFAULT_ZOOM}
+      zoomControl={false}
       className="h-full w-full"
     >
       <TileLayer

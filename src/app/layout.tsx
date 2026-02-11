@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
@@ -30,19 +31,22 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <header className="sticky top-0 z-30 flex items-center justify-between bg-brand-navy px-4 py-3">
-          <Link href="/" className="flex flex-col">
-            <span className="text-lg font-bold text-white">
-              MCRRC Run Finder
-            </span>
-            <span className="text-xs text-gray-300">
-              A Place For Every Pace
-            </span>
-          </Link>
-          <Link
-            href="/runs/new"
-            className="text-sm font-medium text-brand-orange hover:text-white"
-          >
-            Add a Run
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/mcrrc-logo.png"
+              alt="MCRRC logo"
+              width={36}
+              height={36}
+              className="rounded-full"
+            />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold leading-tight text-white">
+                Run Finder
+              </span>
+              <span className="text-xs text-gray-300">
+                A Place For Every Pace
+              </span>
+            </div>
           </Link>
         </header>
         {children}
