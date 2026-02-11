@@ -21,7 +21,7 @@ const DAYS_OF_WEEK = [
   "Sunday",
 ] as const;
 
-const TERRAIN_OPTIONS = ["Road", "Trail", "Mixed"] as const;
+const TERRAIN_OPTIONS = ["Road", "Trail", "Mixed", "Track"] as const;
 
 const DEFAULT_PACE_GROUPS: PaceGroupInput = {
   sub_8: "rarely",

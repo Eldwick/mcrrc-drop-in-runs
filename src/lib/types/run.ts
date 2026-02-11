@@ -18,7 +18,7 @@ const daysOfWeek = [
   "Sunday",
 ] as const;
 
-const terrainTypes = ["Road", "Trail", "Mixed"] as const;
+const terrainTypes = ["Road", "Trail", "Mixed", "Track"] as const;
 
 const paceRanges = ["sub_8", "8_to_9", "9_to_10", "10_plus"] as const;
 

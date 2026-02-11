@@ -30,6 +30,7 @@ const terrainColors: Record<string, string> = {
   Road: "bg-gray-100 text-gray-700",
   Trail: "bg-green-100 text-green-700",
   Mixed: "bg-amber-100 text-amber-700",
+  Track: "bg-blue-100 text-blue-700",
 };
 
 export const RunCard = ({
