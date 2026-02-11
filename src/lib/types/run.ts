@@ -58,3 +58,23 @@ export type CreateRunInput = z.infer<typeof createRunSchema>;
 export type UpdateRunInput = z.infer<typeof updateRunSchema>;
 export type SeekerQuery = z.infer<typeof seekerQuerySchema>;
 export type PaceGroupInput = z.infer<typeof paceGroupSchema>;
+
+export interface RunResponse {
+  id: number;
+  name: string;
+  dayOfWeek: string;
+  startTime: string;
+  locationName: string;
+  latitude: number;
+  longitude: number;
+  typicalDistances: string;
+  terrain: string;
+  paceGroups: PaceGroupInput;
+  contactName: string | null;
+  contactEmail: string | null;
+  contactPhone: string | null;
+  notes: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
