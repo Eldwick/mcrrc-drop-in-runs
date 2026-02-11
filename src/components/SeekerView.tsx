@@ -120,7 +120,7 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
       {/* Layer 2: Floating search bar */}
       <div
         className="fixed left-4 right-4 z-20 mx-auto max-w-lg"
-        style={{ top: HEADER_HEIGHT + 24 }}
+        style={{ top: HEADER_HEIGHT + 32 }}
       >
         <FloatingSearchBar
           locationQuery={state.locationQuery}

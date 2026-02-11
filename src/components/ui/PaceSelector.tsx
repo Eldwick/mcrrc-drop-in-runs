@@ -12,8 +12,10 @@ interface PaceSelectorProps {
 
 export const PaceSelector = ({ selectedPace, onSelectPace }: PaceSelectorProps) => {
   return (
-    <div className="grid grid-cols-4 gap-1">
-      {paceRangeKeys.map((pace) => (
+    <div>
+      <p className="mb-1.5 text-xs font-medium text-gray-500">Your pace (min/mile)</p>
+      <div className="grid grid-cols-4 gap-1">
+        {paceRangeKeys.map((pace) => (
         <button
           key={pace}
           type="button"
@@ -26,7 +28,8 @@ export const PaceSelector = ({ selectedPace, onSelectPace }: PaceSelectorProps) 
         >
           {PACE_RANGE_LABELS[pace]}
         </button>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
