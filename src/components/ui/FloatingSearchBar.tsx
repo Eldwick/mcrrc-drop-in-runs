@@ -10,6 +10,7 @@ interface FloatingSearchBarProps {
   locationQuery: string;
   onLocationQueryChange: (query: string) => void;
   onSearch: (query: string) => void;
+  debouncedGeocodeAddress: (query: string) => void;
   geocodeResults: GeocodeResult[];
   isGeocoding: boolean;
   geocodeError: string | null;
@@ -25,6 +26,7 @@ export const FloatingSearchBar = ({
   locationQuery,
   onLocationQueryChange,
   onSearch,
+  debouncedGeocodeAddress,
   geocodeResults,
   isGeocoding,
   geocodeError,
@@ -39,6 +41,14 @@ export const FloatingSearchBar = ({
   const barRef = useRef<HTMLDivElement>(null);
 
   const collapse = useCallback(() => setIsExpanded(false), []);
+
+  const handleLocationQueryChange = useCallback(
+    (query: string) => {
+      onLocationQueryChange(query);
+      debouncedGeocodeAddress(query);
+    },
+    [onLocationQueryChange, debouncedGeocodeAddress]
+  );
 
   // Click-outside handler
   useEffect(() => {
@@ -100,7 +110,7 @@ export const FloatingSearchBar = ({
           <div className="p-3">
             <LocationSearch
               query={locationQuery}
-              onQueryChange={onLocationQueryChange}
+              onQueryChange={handleLocationQueryChange}
               onSearch={onSearch}
               geocodeResults={geocodeResults}
               isGeocoding={isGeocoding}
@@ -108,6 +118,7 @@ export const FloatingSearchBar = ({
               onSelectResult={handleSelectGeoResult}
               onClear={onClearLocation}
               hasLocation={hasLocation}
+              autoFocus={true}
             />
             <div className="mt-2">
               <PaceSelector

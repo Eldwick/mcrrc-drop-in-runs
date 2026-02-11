@@ -25,7 +25,7 @@ function getSummaryText(
 }
 
 export const SeekerView = ({ runs }: SeekerViewProps) => {
-  const { state, dispatch, rankedRuns, geocodeAddress } = useSeekerState(runs);
+  const { state, dispatch, rankedRuns, geocodeAddress, debouncedGeocodeAddress } = useSeekerState(runs);
 
   const handleLocationQueryChange = useCallback(
     (query: string) => {
@@ -126,6 +126,7 @@ export const SeekerView = ({ runs }: SeekerViewProps) => {
           locationQuery={state.locationQuery}
           onLocationQueryChange={handleLocationQueryChange}
           onSearch={handleSearch}
+          debouncedGeocodeAddress={debouncedGeocodeAddress}
           geocodeResults={state.geocodeResults}
           isGeocoding={state.isGeocoding}
           geocodeError={state.geocodeError}

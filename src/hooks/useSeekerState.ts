@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useMemo, useCallback } from "react";
+import { useReducer, useMemo, useCallback, useRef, useEffect } from "react";
 import { rankRuns } from "@/lib/utils/ranking";
 import type { RunResponse, PaceRange, RankedRun, GeocodeResult } from "@/lib/types/run";
 
@@ -25,6 +25,7 @@ type SeekerAction =
   | { type: "GEOCODE_START" }
   | { type: "GEOCODE_SUCCESS"; results: GeocodeResult[] }
   | { type: "GEOCODE_ERROR"; error: string }
+  | { type: "CLEAR_GEOCODE_RESULTS" }
   | { type: "CLEAR_LOCATION" }
   | { type: "SET_SHEET_STATE"; sheetState: SheetSnapState };
 
@@ -76,6 +77,8 @@ export function seekerReducer(state: SeekerState, action: SeekerAction): SeekerS
       return { ...state, isGeocoding: false, geocodeResults: action.results };
     case "GEOCODE_ERROR":
       return { ...state, isGeocoding: false, geocodeError: action.error };
+    case "CLEAR_GEOCODE_RESULTS":
+      return { ...state, geocodeResults: [], geocodeError: null };
     case "CLEAR_LOCATION":
       return {
         ...state,
@@ -129,5 +132,33 @@ export function useSeekerState(runs: RunResponse[]) {
     }
   }, []);
 
-  return { state, dispatch, rankedRuns, geocodeAddress };
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const debouncedGeocodeAddress = useCallback(
+    (query: string) => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+
+      if (!query.trim()) {
+        dispatch({ type: "CLEAR_GEOCODE_RESULTS" });
+        return;
+      }
+
+      debounceTimerRef.current = setTimeout(() => {
+        geocodeAddress(query);
+      }, 1500);
+    },
+    [geocodeAddress]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
+  return { state, dispatch, rankedRuns, geocodeAddress, debouncedGeocodeAddress };
 }

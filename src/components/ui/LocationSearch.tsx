@@ -12,6 +12,7 @@ interface LocationSearchProps {
   onSelectResult: (result: GeocodeResult) => void;
   onClear: () => void;
   hasLocation: boolean;
+  autoFocus?: boolean;
 }
 
 export const LocationSearch = ({
@@ -24,6 +25,7 @@ export const LocationSearch = ({
   onSelectResult,
   onClear,
   hasLocation,
+  autoFocus,
 }: LocationSearchProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +34,12 @@ export const LocationSearch = ({
 
   return (
     <div className="relative">
+      <label
+        htmlFor="location-input"
+        className="mb-1.5 block text-xs font-medium text-gray-500"
+      >
+        Location
+      </label>
       <form onSubmit={handleSubmit}>
         <div className="relative">
           {/* Pin icon prefix */}
@@ -50,11 +58,13 @@ export const LocationSearch = ({
             </svg>
           </div>
           <input
+            id="location-input"
             type="text"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Zip code or address"
+            placeholder="e.g., 20814 or Bethesda"
             aria-label="Search location"
+            autoFocus={autoFocus}
             className="h-11 w-full rounded-md border border-gray-300 pl-9 pr-10 text-sm focus:border-brand-purple focus:outline-none focus:ring-1 focus:ring-brand-purple"
           />
           {isGeocoding ? (
