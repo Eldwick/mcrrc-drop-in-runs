@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { runs } from "@/lib/db/schema";
-import { DynamicRunMap } from "@/components/map/DynamicRunMap";
+import { SeekerView } from "@/components/SeekerView";
 import type { RunResponse, PaceGroupInput } from "@/lib/types/run";
 
 async function getActiveRuns(): Promise<RunResponse[]> {
@@ -32,8 +32,8 @@ export default async function Home() {
   const activeRuns = await getActiveRuns();
 
   return (
-    <main className="h-[calc(100vh-49px)]">
-      <DynamicRunMap runs={activeRuns} />
+    <main>
+      <SeekerView runs={activeRuns} />
     </main>
   );
 }

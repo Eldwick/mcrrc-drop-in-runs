@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { AvailabilityLevel } from "@/lib/utils/scoring";
 
 const availabilityLevels = [
   "consistently",
@@ -20,6 +21,28 @@ const daysOfWeek = [
 const terrainTypes = ["Road", "Trail", "Mixed"] as const;
 
 const paceRanges = ["sub_8", "8_to_9", "9_to_10", "10_plus"] as const;
+
+export type PaceRange = (typeof paceRanges)[number];
+
+export const PACE_RANGE_LABELS: Record<PaceRange, string> = {
+  sub_8: "< 8:00",
+  "8_to_9": "8:00–9:00",
+  "9_to_10": "9:00–10:00",
+  "10_plus": "10:00+",
+};
+
+export interface RankedRun {
+  run: RunResponse;
+  relevanceScore: number;
+  distanceMiles: number;
+  paceMatch: AvailabilityLevel;
+}
+
+export interface GeocodeResult {
+  displayName: string;
+  lat: number;
+  lng: number;
+}
 
 export const paceGroupSchema = z.object({
   sub_8: z.enum(availabilityLevels),

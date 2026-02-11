@@ -18,8 +18,26 @@ const MapPlaceholder = () => {
 
 interface DynamicRunMapProps {
   runs: RunResponse[];
+  userLocation?: { lat: number; lng: number } | null;
+  selectedRunId?: number | null;
+  onMapClick?: (lat: number, lng: number) => void;
+  onMarkerClick?: (runId: number) => void;
 }
 
-export const DynamicRunMap = ({ runs }: DynamicRunMapProps) => {
-  return <RunMap runs={runs} />;
+export const DynamicRunMap = ({
+  runs,
+  userLocation,
+  selectedRunId,
+  onMapClick,
+  onMarkerClick,
+}: DynamicRunMapProps) => {
+  return (
+    <RunMap
+      runs={runs}
+      userLocation={userLocation}
+      selectedRunId={selectedRunId}
+      onMapClick={onMapClick}
+      onMarkerClick={onMarkerClick}
+    />
+  );
 };
