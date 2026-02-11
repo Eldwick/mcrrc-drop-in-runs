@@ -100,7 +100,7 @@ export default function EditRunPage() {
   // Render validation errors (no effect needed)
   if (validationError) {
     return (
-      <main className="mx-auto max-w-lg px-4 py-6">
+      <main className="relative z-0 mx-auto max-w-lg px-4 py-6">
         <h1 className="text-xl font-bold text-brand-navy">Edit Run</h1>
         <div className="mt-6 rounded-md bg-red-50 p-4">
           <p className="text-sm text-red-700">{validationError}</p>
@@ -117,7 +117,7 @@ export default function EditRunPage() {
 
   if (fetchState.status === "loading") {
     return (
-      <main className="mx-auto max-w-lg px-4 py-6">
+      <main className="relative z-0 mx-auto max-w-lg px-4 py-6">
         <h1 className="text-xl font-bold text-brand-navy">Edit Run</h1>
         <div className="mt-8 flex items-center justify-center">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-purple border-t-transparent" />
@@ -131,7 +131,7 @@ export default function EditRunPage() {
 
   if (fetchState.status === "error") {
     return (
-      <main className="mx-auto max-w-lg px-4 py-6">
+      <main className="relative z-0 mx-auto max-w-lg px-4 py-6">
         <h1 className="text-xl font-bold text-brand-navy">Edit Run</h1>
         <div className="mt-6 rounded-md bg-red-50 p-4">
           <p className="text-sm text-red-700">{fetchState.message}</p>
@@ -147,7 +147,7 @@ export default function EditRunPage() {
   }
 
   return (
-    <main className="mx-auto max-w-lg px-4 py-6">
+    <main className="relative z-0 mx-auto max-w-lg px-4 py-6">
       <h1 className="text-xl font-bold text-brand-navy">Edit Run</h1>
       <RunForm
         mode="edit"

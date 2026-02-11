@@ -67,7 +67,7 @@ export default async function RunDetailPage({ params }: RunDetailPageProps) {
   const hasContact = row.contactName || row.contactEmail || row.contactPhone;
 
   return (
-    <main className="mx-auto max-w-lg px-4 py-6">
+    <main className="relative z-0 mx-auto max-w-lg px-4 pb-6 pt-4">
       {/* Map */}
       <div className="h-[200px] w-full overflow-hidden rounded-lg">
         <DynamicDetailMap latitude={latitude} longitude={longitude} />
