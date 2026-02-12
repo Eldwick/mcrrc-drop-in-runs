@@ -100,6 +100,7 @@ export default async function RunDetailPage({ params }: RunDetailPageProps) {
       {/* Pace groups */}
       <section className="mt-5">
         <h2 className="text-sm font-semibold text-brand-navy">Pace Groups</h2>
+        <p className="mt-1 text-xs text-gray-500">How often each pace group shows up</p>
         <div className="mt-2 divide-y divide-gray-100 rounded-lg border border-gray-200">
           {paceKeys.map((key) => {
             const level = paceGroups[key] as AvailabilityLevel;

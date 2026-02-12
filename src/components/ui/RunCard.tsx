@@ -20,10 +20,10 @@ const paceMatchColors: Record<AvailabilityLevel, string> = {
 };
 
 const paceMatchLabels: Record<AvailabilityLevel, string> = {
-  consistently: "Consistently",
-  frequently: "Frequently",
-  sometimes: "Sometimes",
-  rarely: "Rarely",
+  consistently: "Consistently has your pace",
+  frequently: "Frequently has your pace",
+  sometimes: "Sometimes has your pace",
+  rarely: "Rarely has your pace",
 };
 
 const terrainColors: Record<string, string> = {
@@ -77,7 +77,7 @@ export const RunCard = ({
         )}
         {paceMatch && (
           <span className={`text-xs font-medium ${paceMatchColors[paceMatch]}`}>
-            Your pace: {paceMatchLabels[paceMatch]}
+            {paceMatchLabels[paceMatch]}
           </span>
         )}
       </div>
